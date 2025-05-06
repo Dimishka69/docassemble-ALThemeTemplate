@@ -14,7 +14,7 @@ comment: |
 objects:
   # The logo can be a PNG, GIF, SVG or JPG. About 40x40 px is recommended.
   # place the logo in the Docassemble "static" folder
-  - al_logo: DAStaticFile.using(filename="iconmonstr-script-5-64.png")
+  - al_logo: DAStaticFile.using(filename="images_32.jpg")
 ---
 ##################### Title and basic information ########################
 # See: https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/framework/magic_variables
