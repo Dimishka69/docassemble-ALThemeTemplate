@@ -1,0 +1,30 @@
+/* .bg-dark is the color used for the navbar. Replace with your theme color. */
+/* .bg-dark {
+    background-color: #002e60 !important;    
+} */
+
+.al-logo img {
+    max-height: 40px;
+}
+
+.al-title {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+}
+
+.da-pad-for-navbar {
+    padding-top: 70px;
+}
+
+.da-top-for-navbar {
+    top: 70px;
+}
+
+.visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}

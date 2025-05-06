@@ -1,0 +1,221 @@
+---
+comment: |
+  Use this file as a model for your own organization's branding package. You can
+  also place custom versions of questions from ql_baseline.yml into this file.
+
+  Then, reference this package in your own interview YAML file. For example,
+  if you added this file to a package named "ALMyState", you might have 
+  an include block in each interview that looks like this:
+    ---
+    include:
+      - docassemble.ALMyState:custom_organization.yml
+---
+###################### Logo and basic settings ###########################
+objects:
+  # The logo can be a PNG, GIF, SVG or JPG. About 40x40 px is recommended.
+  # place the logo in the Docassemble "static" folder
+  - al_logo: DAStaticFile.using(filename="iconmonstr-script-5-64.png")
+---
+##################### Title and basic information ########################
+# See: https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/framework/magic_variables
+---
+# Metadata is used in the tab and navigation bar
+metadata:
+  title: |
+    File legal forms online
+  short title: |
+    File forms  
+  exit url: |
+    https://www.example.com
+---
+code: |
+  AL_ORGANIZATION_TITLE = "My State Forms"
+---  
+code: |
+  AL_ORGANIZATION_HOMEPAGE = "https://mystate.example.com"
+---
+code: |
+  AL_DEFAULT_COUNTRY = "US"
+---
+code: |
+  AL_DEFAULT_STATE = "MA"
+---
+code: |
+  AL_DEFAULT_LANGUAGE = "en"  
+---
+features:
+  question help button: True
+  question back button: True
+  progress bar: True
+  navigation: True
+  css: colors.css
+---
+########################### Bootstrap theme ##############################
+comment: |
+  If you would like to customize:
+  - button style
+  - fonts
+  - theme colors
+
+  You should generate a bootstrap theme file instead of overriding individual
+  CSS properties.
+
+  Instructions available here:
+  https://suffolklitlab.org/docassemble-AssemblyLine-documentation/docs/customization/overview/
+
+  Once you generate the theme file: 
+  
+  1. name it something like "my_theme.css"
+  2. Upload it to the "static" folder
+  3. add a block like this:
+  ---
+  features:
+    bootstrap theme: my_theme.css
+---
+########################### GitHub Feedback ##############################
+---
+code: |
+  # This points the feedback link to the feedback.yml file in this package.
+  # E.g., docassemble.ALMyState
+  feedback_form = f"{ user_info().current_package }:feedback.yml"
+---
+########################### Intro screen #################################
+---
+id: basic questions intro screen
+question: |
+  ${interview_short_title}: File Legal Forms Online
+subquestion: |
+  % if form_approved_for_email_filing:
+  This website can help you complete and file court forms in 3 steps:
+  % else:
+  This website can help you complete and download forms in 3 steps:
+  % endif
+  
+  Step 1. Answer questions that will fill in your form for you.  
+  Step 2. Preview the completed form.  
+  % if form_approved_for_email_filing:  
+  Step 3. Email the form to the court using this secure website and save copies
+  for yourself for later reference.  
+  % elif al_form_type in ['starts_case','existing_case','appeal']:
+  Step 3. Download and print the final form. You will need to deliver it
+  to the court on your own.
+  % else:
+  Step 3. Download and print the final form. You will need to deliver it 
+  on your own.
+  % endif
+  
+  This site is not a lawyer. If you would like a lawyer, find [your local
+  legal aid provider](https://www.lsc.gov/what-legal-aid/find-legal-aid).
+  
+  Tap the {green words} on any screen for a definition or more information.
+  
+  % if chat_partners_available().help:
+  Live help is currently available in this interview. Click the speech bubble
+  (:comment-alt:) in the navigation bar to connect to a live advocate for help.
+  % endif
+fields:
+  # This points to a terms of use in this package which you can edit.
+  # If you prefer, you can link to a static website by deleting everything
+  # in the ${ } tags and replacing with a static website, like 
+  # https://example.com/tos
+  - To continue, you must accept our [terms of use](${interview_url(i=f"{ user_info().current_package }:terms_of_use.yml") }){:target="_blank"}: acknowledged_information_use
+    datatype: checkboxes
+    none of the above: False    
+    minlength: 1
+    choices:
+      - I accept the terms of use.: I accept
+    validation messages:
+      minlength: |
+        You cannot continue unless you agree to the terms of use.        
+continue button field: al_intro_screen
+terms:
+  green words: |
+    Green words are legal terms or a short way of referring to something that needs more explanation. The definition or explanation pops up when you tap the green words.
+right: |
+  % if user_has_saved_answers:
+  ${fa_icon("bell", color="primary", size="sm")}
+  Saved answers available!  
+  
+  ${action_button_html(url_action('load_answer'), icon="folder-open", label=word("View answers"), size="sm" )}
+  % endif
+---
+######################## Court selection ##############################
+# This section allows you to create your own custom database of courts.
+# It can be customized to fit your needs
+---
+comment: |
+  The al_courts.py file in this package is a simple frontend to an Excel spreadsheet
+  with court names and addresses.
+
+  You may want to edit the Python code to add additional features, such as address
+  lookup, or to move the spreadsheet into the database for performance reasons.
+modules:
+  - .al_courts
+---
+objects:
+  # the court database can be an Excel, CSV, or JSON data file
+  - all_courts: ALCourtLoader.using(file_name="court_sample.xlsx")
+---
+template: how_to_pick_court_help_template
+content: |
+  For some cases, you can choose your court.
+  % if user_role=='plaintiff':    
+  How do you know which court to choose?
+  
+  The District Court and Superior Court are all courts that can hear
+  any type of case. Housing, Probate and Family and Juvenile Court are
+    **specialist** courts that hear one kind of case.
+  They have judges with special training as well as special 
+  resources available.
+  
+  Different courts can make different kinds of decisions. Not every court
+  can give you every kind of help. For example, you can only
+  ask for visitation in the Probate and Family Court. Only
+  the Housing Court or Superior Court can hear discrimination
+  cases.
+  
+  Depending on where you live, different courts may be further or closer to
+  your address. There are many district courts all over the state,
+  but each county has only one or a few Superior Courts or specialty
+  courts.
+  
+  Choosing a court means thinking about what kind of help you need, as well
+  as which court you can get transportation to on the day of your hearing.
+  
+  Only you know the right choice.
+  
+  % else:
+  If you are responding to a case someone else filed, you may not
+  get to choose your court. Select the court that is already
+  listed on your court paperwork.
+  % endif
+---
+code: |
+  # This is just a placeholder
+  allowed_courts = ['District', 'Superior']
+---
+id: choose a court (courts matching provided address were found)
+question: |
+  % if al_form_type == 'starts_case':
+  What court do you want to file in?
+  % elif al_form_type == 'appeal':
+  What is the name of the trial court your case was originally filed in?
+  % else:
+  What court is your case in?
+  % endif
+subquestion: |
+  % if not al_form_type == 'starts_case':
+  Look at your court paperwork. Match the name listed there.
+  % endif
+fields:
+  - no label: trial_court_index
+    code: all_courts.filter_courts(allowed_courts, column='department')
+help: 
+  label: |
+    How do I pick a court?
+  content: |
+    ${ how_to_pick_court_help_template }
+---
+code: |
+  trial_court = all_courts.as_court('trial_court', trial_court_index)
+  trial_court.geolocate()  
