@@ -1,6 +1,6 @@
 ---
 comment: |
-  Use this file as a model for your own organization's branding package. You can
+  Use this. You can
   also place custom versions of questions from ql_baseline.yml into this file.
 
   Then, reference this package in your own interview YAML file. For example,
@@ -86,9 +86,9 @@ question: |
   ${interview_short_title}: File Legal Forms Online
 subquestion: |
   % if form_approved_for_email_filing:
-  This website can help you complete and file court forms in 3 steps:
+  This websitee :
   % else:
-  This website can help you complete and download forms in 3 steps:
+  This website :
   % endif
   
   Step 1. Answer questions that will fill in your form for you.  
